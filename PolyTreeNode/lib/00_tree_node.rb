@@ -49,6 +49,20 @@ class PolyTreeNode
     "#{value}"
   end
 
+  def bfs(target)
+    queue = [self]
+    until queue.empty?
+      current_node = queue.pop
+      if current_node.value == target
+        return current_node
+      else
+        current_node.children.each {|child| queue.unshift(child)}
+      end
+    end
+
+    nil
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -62,5 +76,5 @@ if __FILE__ == $PROGRAM_NAME
   end
 
 
-  nodes[0].dfs('e')
+  nodes[0].bfs('e')
 end
