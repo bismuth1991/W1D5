@@ -1,6 +1,7 @@
+require 'byebug'
+
 class PolyTreeNode
   attr_reader :parent, :children, :value
-  # attr_accessor :parent
 
   def initialize(value)
     @parent = nil
@@ -9,32 +10,57 @@ class PolyTreeNode
   end
 
   def parent=(parent_node)
-    # @parent = parent_node
-    # mom = self.parent
-    if parent_node == nil
-      @parent = nil
-      # mom.children.delete(self)
-      return
-    end
-
-    if !parent_node.already_have_child?(self)
-      update_relationship(parent_node)
-    end
-  end
-
-  def already_have_child?(child_node)
-    children.include?(child_node)
-  end
-
-  def update_relationship(parent_node)
-    if self.parent
-      old_parent = self.parent
+    old_parent = self.parent
+    if parent_node.nil?
       old_parent.children.delete(self)
+      @parent = nil
+    elsif self.parent && parent_node
+      old_parent.children.delete(self)
+      add_parent(parent_node)
+    else
+      add_parent(parent_node)
     end
+  end
 
+  def add_parent(parent_node)
     @parent = parent_node
     parent_node.children.push(self)
   end
 
+  def add_child(child_node)
+    child_node.parent=(self)
+  end
 
+  def remove_child(child_node)
+    child_node.parent=(nil)
+  end
+
+  def dfs(target)
+    return self if self.value == target
+
+    children.each do |child_node|
+      result = child_node.dfs(target)
+      return result if result
+    end
+    nil
+  end
+
+  def inspect
+    "#{value}"
+  end
+
+end
+
+if __FILE__ == $PROGRAM_NAME
+  nodes = ('a'..'g').map { |value| PolyTreeNode.new(value) }
+
+  parent_index = 0
+  nodes.each_with_index do |child, index|
+    next if index.zero?
+    child.parent = nodes[parent_index]
+    parent_index += 1 if index.even?
+  end
+
+
+  nodes[0].dfs('e')
 end
