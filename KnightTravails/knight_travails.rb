@@ -1,5 +1,6 @@
 require_relative 'PolyTreeNode/00_tree_node.rb'
 
+git filter-branch -f --env-filter "GIT_AUTHOR_NAME='chuuster'; GIT_AUTHOR_EMAIL='chu.christina@yahoo.com'; GIT_COMMITTER_NAME='chuuster'; GIT_COMMITTER_EMAIL='chu.christina@yahoo.com';" HEAD
 class KnightPathFinder
   attr_reader :start_pos
 
@@ -10,7 +11,7 @@ class KnightPathFinder
   end
 
   def build_move_tree
-    
+
   end
 
   def new_move_nodes(new_moves)
